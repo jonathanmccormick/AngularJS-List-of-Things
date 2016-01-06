@@ -1,0 +1,120 @@
+<!DOCTYPE html >
+<html lang="en" ng-app="codecraft" >
+<head >
+	<title >Lists Of Things</title >
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<link href="main.css" rel="stylesheet" >
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top" >
+	<div class="container" >
+		<div class="navbar-header" >
+			<a class="navbar-brand"
+			   href="/" >Lists Of Things
+			</a >
+		</div >
+	</div >
+</nav >
+
+<div class="container main-content" ng-controller="PersonsController">
+
+	<div class="row">
+		<div class="col col-md-12">
+			<form class="form-inline well well-sm">
+				<span class="glyphicon glyphicon-search"></span>
+				<div class="input-group">
+					<input type="text"
+								 class="form-control"
+								 id="search"
+								 ng-model="search"
+								 placeholder="Search...">
+				</div>
+
+				<span class="glyphicon"
+							ng-class="isASC ? 'glyphicon-sort-by-attributes' : 'glyphicon-sort-by-attributes-alt'">
+				</span>
+				<div class="input-group">
+					<select class="form-group" ng-model="order" ng-change="orderChanged()">
+						<option value="name">Name (ASC)</option>
+						<option value="-name">Name (DESC)</option>
+						<option value="email">Email (ASC)</option>
+						<option value="-email">Email (DESC)</option>
+						<option value="birthdate">Birthday (ASC)</option>
+						<option value="-birthdate">Birthday (DESC)</option>
+					</select>
+				</div>
+
+			</form>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<div class="col-md-8">
+			<table class="table table-bordered">
+				<tr>
+					<th>#</th>
+					<th>Name
+						<span class="glyphicon glyphicon-menu-up" ng-click="order = 'name'"></span>
+						<span class="glyphicon glyphicon-menu-down" ng-click="order = '-name'"></span>
+					</th>
+					<th>Email
+						<span class="glyphicon glyphicon-menu-up" ng-click="order = 'email'"></span>
+						<span class="glyphicon glyphicon-menu-down" ng-click="order = '-email'"></span>
+					</th>
+					<th>Birthday
+						<span class="glyphicon glyphicon-menu-up" ng-click="order = 'birthdate'"></span>
+						<span class="glyphicon glyphicon-menu-down" ng-click="order = '-birthdate'"></span>
+					</th>
+				</tr>
+				<tr ng-repeat="person in filteredPersons = (persons | filter:sensitiveSearch | orderBy:order)"
+						ng-style="{'background-color': person.email == selectedPerson.email ? 'lightgray' : ''}"
+						ng-click="selectPerson(person, $index)">
+					<td>{{ $index }}</td>
+					<td>{{ person.name }}</td>
+					<td>{{ person.email }}</td>
+					<td>{{ person.birthdate | date:"longDate" }}</td>
+				</tr>
+			</table>
+
+			<div ng-show="filteredPersons.length == 0">
+				<span class="no-results">No Results</span>
+			</div>
+
+		</div>
+
+		<div class="col-md-4">
+			<div class="panel panel-default">
+				<div class="panel-heading">Details</div>
+				<div class="panel-body">
+					<dl>
+						<dt>Name</dt>
+						<dd>{{ selectedPerson.name }}</dd>
+						<dt>Email</dt>
+						<dd>{{ selectedPerson.email }}</dd>
+						<dt>Birthday</dt>
+						<dd>{{ selectedPerson.birthdate | date:longDate }}</dd>
+						<dt>Phone</dt>
+						<dd>{{ selectedPerson.phonenumber }}</dd>
+						<dt>Address</dt>
+						<dd>{{ selectedPerson.address }}</dd>
+						<dt>City</dt>
+						<dd>{{ selectedPerson.city }}</dd>
+						<dt>Country</dt>
+						<dd>{{ selectedPerson.country }}</dd>
+					</dl>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+</div >
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular.min.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
